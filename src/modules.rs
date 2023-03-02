@@ -16,7 +16,7 @@ use std::io::Write;
 pub async fn update_by_column_entry() -> Result<(), anyhow::Error> {
     
     dotenv::from_filename(".env").ok();
-    let client = Postgrest::new("https://jtnomicgsvbudjhjxeuo.supabase.co/rest/v1/")
+    let client = Postgrest::new("SUPABASE_URI")
     .insert_header("apikey", dotenv::var("SUPABASE_KEY").unwrap());
 
     let mut id_input = String::new();
@@ -122,7 +122,7 @@ pub async fn update_by_column_entry() -> Result<(), anyhow::Error> {
 pub async fn delete_by_id() -> Result<(), anyhow::Error> {
 
     dotenv::from_filename(".env").ok();
-    let client = Postgrest::new("https://jtnomicgsvbudjhjxeuo.supabase.co/rest/v1/")
+    let client = Postgrest::new("SUPABASE_URI")
     .insert_header("apikey", dotenv::var("SUPABASE_KEY").unwrap());
 
     let mut id_input = String::new();
@@ -150,7 +150,7 @@ pub async fn delete_by_id() -> Result<(), anyhow::Error> {
 pub async fn enter_json_fields() -> Result<(), anyhow::Error> {
     
     dotenv::from_filename(".env").ok();
-    let client = Postgrest::new("https://jtnomicgsvbudjhjxeuo.supabase.co/rest/v1/")
+    let client = Postgrest::new("SUPABASE_URI")
     .insert_header("apikey", dotenv::var("SUPABASE_KEY").unwrap());
 
 
@@ -204,7 +204,7 @@ pub async fn enter_json_fields() -> Result<(), anyhow::Error> {
 
 pub async fn simple_query() -> Result<(), anyhow::Error> {
     dotenv::from_filename(".env").ok();
-    let client = Postgrest::new("https://jtnomicgsvbudjhjxeuo.supabase.co/rest/v1/")
+    let client = Postgrest::new("SUPABASE_URI")
     .insert_header("apikey", dotenv::var("SUPABASE_KEY").unwrap());
 
     let resp = client
@@ -224,13 +224,13 @@ pub async fn simple_query() -> Result<(), anyhow::Error> {
 
 pub async fn add_from_json_file() -> Result<(), anyhow::Error> {
     dotenv::from_filename(".env").ok();
-    let client = Postgrest::new("https://jtnomicgsvbudjhjxeuo.supabase.co/rest/v1/")
+    let client = Postgrest::new("SUPABASE_URI")
     .insert_header("apikey", dotenv::var("SUPABASE_KEY").unwrap());
 
     let mut contents = {
         let file_contents = fs::read_to_string("./data/test.json")
-        .expect("Logrocket: Should have been able to read file!");
-        serde_json::from_str::<Value>(&file_contents).expect("LogRocket: error serializing to JSON")
+        .expect("Should have been able to read file!");
+        serde_json::from_str::<Value>(&file_contents).expect("Error serializing to JSON")
     };
 
     let resp = client
@@ -247,13 +247,3 @@ pub async fn add_from_json_file() -> Result<(), anyhow::Error> {
 }
 
 // NOTES
-
-    // NOTE MORE COMPLICATED WAY TO FORMAT::
-    // let buf = Vec::new();
-    // let formatter = serde_json::ser::PrettyFormatter::with_indent(b"   ");
-    // let mut ser = serde_json::Serializer::with_formatter(buf, formatter);
-    // objects.serialize(&mut ser).unwrap();
-    // println!("{}", String::from_utf8(ser.into_inner()).unwrap());
-
-    // NOTE: SIMPLER WAY FOR SIMILAR RESULT::
-    // just use above abbreviated version... "serde_json::to_string_pretty"
